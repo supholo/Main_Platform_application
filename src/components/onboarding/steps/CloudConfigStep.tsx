@@ -1,7 +1,7 @@
 // src/components/onboarding/steps/CloudConfigStep.tsx
 import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Alert } from '@/components/ui/alert';
+import { Card, CardContent } from '../../ui/Card';
+import { Alert } from '../..//ui/alert';
 
 interface CloudConfigData {
   provider: string;

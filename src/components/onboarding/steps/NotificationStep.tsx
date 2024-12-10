@@ -1,6 +1,6 @@
 import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Alert } from '@/components/ui/alert';
+import { Card, CardContent } from '../../ui/Card';
+import { Alert } from '../../ui/alert';
 import { Bell, Mail, MessageSquare, Smartphone } from 'lucide-react';
 
 interface NotificationChannel {

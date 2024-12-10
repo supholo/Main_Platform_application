@@ -1,6 +1,6 @@
 // src/components/onboarding/steps/TenantDetailsStep.tsx
 import React from 'react';
-import { Card, CardContent } from '../../ui/card';
+import { Card, CardContent } from '../../ui/Card';
 import { Alert } from '../../ui/alert';
 
 interface TenantDetailsFormData {
