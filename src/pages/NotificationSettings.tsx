@@ -22,7 +22,7 @@ import {
   CardContent,
   CardFooter,
   CardAction 
-} from '../components/ui/card';
+} from '../components/ui/Card';
 import { Alert } from '../components/ui/alert';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { 
