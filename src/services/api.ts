@@ -30,9 +30,12 @@ class ApiService {
       ...(this.tenantId ? { 'X-Tenant-ID': this.tenantId } : {})
     };
 
+    const useMock = import.meta.env.VITE_USE_MOCK === 'true';
+    const isDev = import.meta.env.MODE === 'development';
+
     try {
-      // For development/demo, use mock responses
-      if (process.env.NODE_ENV === 'development') {
+      // Use mock responses if mock mode is enabled or in development
+      if (useMock || isDev) {
         return await this.getMockResponse(endpoint, method, data);
       }
 
@@ -50,6 +53,16 @@ class ApiService {
 
       return await response.json();
     } catch (error) {
+      // If mock is enabled and we get an error, try mock response
+      if (useMock) {
+        try {
+          return await this.getMockResponse(endpoint, method, data);
+        } catch (mockError) {
+          console.error('Mock response error:', mockError);
+          throw mockError;
+        }
+      }
+
       if ((error as ApiError).code) {
         throw error;
       }
