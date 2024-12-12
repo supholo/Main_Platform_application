@@ -1,5 +1,3 @@
-// src/components/ConfigurationManagement/ConfigurationEditor.tsx
-
 import React, { useState, useEffect } from 'react';
 import { X, Plus, Trash2, Eye, EyeOff, Lock, Unlock } from 'lucide-react';
 import { Dialog } from '../ui/dialog';
@@ -30,20 +28,20 @@ export const ConfigurationEditor: React.FC<ConfigurationEditorProps> = ({
   onClose,
   initialData
 }) => {
-    const [formData, setFormData] = useState<Partial<Configuration>>({
-        name: '',
-        description: '',
-        type: 'application',
-        values: [],
-        status: 'active',
-        validationRules: {
-          required: [],
-          format: {},
-          range: {}
-        },
-        dependencies: [],
-        metadata: {}
-      });
+  const [formData, setFormData] = useState<Partial<Configuration>>({
+    name: '',
+    description: '',
+    type: 'application',
+    values: [],
+    status: 'active',
+    validationRules: {
+      required: [],
+      format: {},
+      range: {}
+    },
+    dependencies: [],
+    metadata: {}
+  });
 
   const [values, setValues] = useState<ConfigurationValue[]>(
     initialData?.values || []
@@ -122,217 +120,207 @@ export const ConfigurationEditor: React.FC<ConfigurationEditorProps> = ({
     <Dialog isOpen={true} onClose={onClose}>
       <div className="fixed inset-0 z-50 overflow-y-auto">
         <div className="flex min-h-screen items-center justify-center p-4">
-          <div className="w-full max-w-4xl bg-white rounded-lg shadow-xl">
-            <div className="flex justify-between items-center p-6 border-b">
-              <h2 className="text-xl font-semibold">
+          <div className="w-full max-w-3xl bg-white rounded-lg shadow-xl">
+            {/* Header */}
+            <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200">
+              <h2 className="text-xl font-semibold text-gray-900">
                 {configId ? 'Edit Configuration' : 'New Configuration'}
               </h2>
               <button
                 onClick={onClose}
-                className="text-gray-400 hover:text-gray-500"
+                className="text-gray-400 hover:text-gray-500 transition-colors"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="p-6 space-y-6">
+            <form onSubmit={handleSubmit} className="px-6 py-4 space-y-6">
               {errors.submit && (
                 <Alert type="error">{errors.submit}</Alert>
               )}
 
               {/* Basic Information */}
               <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                  />
-                  {errors.name && (
-                    <p className="mt-1 text-sm text-red-600">{errors.name}</p>
-                  )}
-                </div>
+                <h3 className="text-sm font-medium text-gray-900 pb-2 border-b">
+                  Basic Information
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="col-span-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Name
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                    {errors.name && (
+                      <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+                    )}
+                  </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Description
-                  </label>
-                  <textarea
-                    value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    rows={3}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                  />
-                </div>
+                  <div className="col-span-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Type
+                    </label>
+                    <select
+                      value={formData.type}
+                      onChange={(e) => setFormData({ 
+                        ...formData, 
+                        type: e.target.value as ConfigurationType 
+                      })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    >
+                      <option value="application">Application</option>
+                      <option value="environment">Environment</option>
+                      <option value="feature">Feature Flag</option>
+                      <option value="security">Security</option>
+                      <option value="integration">Integration</option>
+                    </select>
+                  </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Type
-                  </label>
-                  <select
-  value={formData.type}
-  onChange={(e) => setFormData({ 
-    ...formData, 
-    type: e.target.value as ConfigurationType 
-  })}
-  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
->
-  <option value="application">Application</option>
-  <option value="environment">Environment</option>
-  <option value="feature">Feature Flag</option>
-  <option value="security">Security</option>
-  <option value="integration">Integration</option>
-</select>
-                </div>
+                  <div className="col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Description
+                    </label>
+                    <textarea
+                      value={formData.description}
+                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                      rows={3}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Tags
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.tags?.join(', ')}
-                    onChange={(e) => setFormData({
-                      ...formData,
-                      tags: e.target.value.split(',').map(t => t.trim())
-                    })}
-                    placeholder="Enter tags separated by commas"
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                  />
+                  <div className="col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Tags
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.tags?.join(', ')}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        tags: e.target.value.split(',').map(t => t.trim())
+                      })}
+                      placeholder="Enter tags separated by commas"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
                 </div>
               </div>
 
               {/* Configuration Values */}
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-medium">Configuration Values</h3>
+                  <h3 className="text-sm font-medium text-gray-900">
+                    Configuration Values
+                  </h3>
                   <button
                     type="button"
                     onClick={addValue}
-                    className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200"
+                    className="inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   >
-                    <Plus className="h-4 w-4 mr-1" />
+                    <Plus className="h-4 w-4 mr-1.5" />
                     Add Value
                   </button>
                 </div>
 
-                {values.map((value, index) => (
-                  <div 
-                    key={value.id} 
-                    className="p-4 border rounded-lg bg-gray-50 space-y-4"
-                  >
-                    <div className="flex items-start space-x-4">
-                      <div className="flex-1">
-                        <label className="block text-sm font-medium text-gray-700">
-                          Key
-                        </label>
-                        <input
-                          type="text"
-                          value={value.key}
-                          onChange={(e) => updateValue(index, { key: e.target.value })}
-                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                        />
-                        {errors[`value-${index}-key`] && (
-                          <p className="mt-1 text-sm text-red-600">
-                            {errors[`value-${index}-key`]}
-                          </p>
-                        )}
-                      </div>
-
-                      <div className="flex-1">
-                        <label className="block text-sm font-medium text-gray-700">
-                          Value
-                        </label>
-                        <div className="mt-1 relative rounded-md shadow-sm">
+                <div className="space-y-3">
+                  {values.map((value, index) => (
+                    <div 
+                      key={value.id} 
+                      className="p-4 border border-gray-200 rounded-md bg-gray-50"
+                    >
+                      <div className="grid grid-cols-12 gap-4">
+                        <div className="col-span-5">
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Key
+                          </label>
                           <input
-                            type={value.isSecret && !showSecrets[value.id] ? "password" : "text"}
-                            value={value.value as string}
-                            onChange={(e) => updateValue(index, { value: e.target.value })}
-                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 pr-10"
+                            type="text"
+                            value={value.key}
+                            onChange={(e) => updateValue(index, { key: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                           />
-                          {value.isSecret && (
-                            <button
-                              type="button"
-                              onClick={() => setShowSecrets({
-                                ...showSecrets,
-                                [value.id]: !showSecrets[value.id]
-                              })}
-                              className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                            >
-                              {showSecrets[value.id] ? (
-                                <EyeOff className="h-4 w-4 text-gray-400" />
-                              ) : (
-                                <Eye className="h-4 w-4 text-gray-400" />
-                              )}
-                            </button>
+                          {errors[`value-${index}-key`] && (
+                            <p className="mt-1 text-sm text-red-600">
+                              {errors[`value-${index}-key`]}
+                            </p>
                           )}
                         </div>
-                        {errors[`value-${index}-value`] && (
-                          <p className="mt-1 text-sm text-red-600">
-                            {errors[`value-${index}-value`]}
-                          </p>
-                        )}
-                      </div>
 
-                      <div className="w-32">
-                        <label className="block text-sm font-medium text-gray-700">
-                          Type
-                        </label>
-                        <select
-  value={formData.status || 'active'}
-  onChange={(e) => setFormData({ 
-    ...formData, 
-    status: e.target.value as ConfigurationStatus 
-  })}
-  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
->
-  <option value="active">Active</option>
-  <option value="inactive">Inactive</option>
-  <option value="pending">Pending</option>
-  <option value="archived">Archived</option>
-</select>
-                      </div>
+                        <div className="col-span-5">
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Value
+                          </label>
+                          <div className="relative">
+                            <input
+                              type={value.isSecret && !showSecrets[value.id] ? "password" : "text"}
+                              value={value.value as string}
+                              onChange={(e) => updateValue(index, { value: e.target.value })}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-10"
+                            />
+                            {value.isSecret && (
+                              <button
+                                type="button"
+                                onClick={() => setShowSecrets({
+                                  ...showSecrets,
+                                  [value.id]: !showSecrets[value.id]
+                                })}
+                                className="absolute inset-y-0 right-2 flex items-center"
+                              >
+                                {showSecrets[value.id] ? (
+                                  <EyeOff className="h-4 w-4 text-gray-400" />
+                                ) : (
+                                  <Eye className="h-4 w-4 text-gray-400" />
+                                )}
+                              </button>
+                            )}
+                          </div>
+                          {errors[`value-${index}-value`] && (
+                            <p className="mt-1 text-sm text-red-600">
+                              {errors[`value-${index}-value`]}
+                            </p>
+                          )}
+                        </div>
 
-                      <div className="pt-6 flex space-x-2">
-                        <button
-                          type="button"
-                          onClick={() => updateValue(index, { isSecret: !value.isSecret })}
-                          className={`p-2 rounded-md ${
-                            value.isSecret 
-                              ? 'bg-yellow-100 text-yellow-800' 
-                              : 'bg-gray-100 text-gray-600'
-                          }`}
-                        >
-                          {value.isSecret ? <Lock className="h-4 w-4" /> : <Unlock className="h-4 w-4" />}
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => removeValue(index)}
-                          className="p-2 rounded-md bg-red-100 text-red-800"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
+                        <div className="col-span-2 flex items-end justify-end space-x-2">
+                          <button
+                            type="button"
+                            onClick={() => updateValue(index, { isSecret: !value.isSecret })}
+                            className={`p-2 rounded-md ${
+                              value.isSecret 
+                                ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200' 
+                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                            }`}
+                          >
+                            {value.isSecret ? <Lock className="h-4 w-4" /> : <Unlock className="h-4 w-4" />}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => removeValue(index)}
+                            className="p-2 rounded-md bg-red-100 text-red-700 hover:bg-red-200"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+
+                        <div className="col-span-12">
+                          <label className="flex items-center mt-2">
+                            <input
+                              type="checkbox"
+                              checked={value.isEncrypted}
+                              onChange={(e) => updateValue(index, { isEncrypted: e.target.checked })}
+                              className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                            />
+                            <span className="ml-2 text-sm text-gray-600">Encrypt Value</span>
+                          </label>
+                        </div>
                       </div>
                     </div>
-
-                    {/* Value Metadata */}
-                    <div className="mt-2 flex items-center space-x-4 text-sm text-gray-500">
-                      <label className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={value.isEncrypted}
-                          onChange={(e) => updateValue(index, { isEncrypted: e.target.checked })}
-                          className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 mr-2"
-                        />
-                        Encrypt Value
-                      </label>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
                 
                 {errors.values && (
                   <p className="mt-1 text-sm text-red-600">{errors.values}</p>
@@ -341,95 +329,101 @@ export const ConfigurationEditor: React.FC<ConfigurationEditorProps> = ({
 
               {/* Advanced Settings */}
               <div className="space-y-4">
-                <h3 className="text-lg font-medium">Advanced Settings</h3>
+                <h3 className="text-sm font-medium text-gray-900 pb-2 border-b">
+                  Advanced Settings
+                </h3>
                 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Status
-                  </label>
-                  <select
-  value={formData.status || 'active'}
-  onChange={(e) => setFormData({ 
-    ...formData, 
-    status: e.target.value as ConfigurationStatus 
-  })}
-  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
->
-  <option value="active">Active</option>
-  <option value="inactive">Inactive</option>
-  <option value="pending">Pending</option>
-  <option value="archived">Archived</option>
-</select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Validation Rules
-                  </label>
-                  <div className="mt-2 space-y-2">
-                  <label className="flex items-center">
-  <input
-    type="checkbox"
-    checked={Boolean(formData.validationRules?.required?.length)}
-    onChange={(e) => {
-      const defaultValues = formData.values || [];
-      setFormData({
-        ...formData,
-        validationRules: {
-          ...formData.validationRules,
-          required: e.target.checked ? defaultValues.map(v => v.key).filter(Boolean) : []
-        }
-      });
-    }}
-    className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-  />
-  <span className="ml-2 text-sm text-gray-700">
-    Make all fields required
-  </span>
-</label>
-                    
-                    <label className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={!!formData.validationRules?.format}
-                        onChange={(e) => setFormData({
-                          ...formData,
-                          validationRules: {
-                            ...formData.validationRules,
-                            format: e.target.checked ? {} : undefined
-                          }
-                        })}
-                        className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 mr-2"
-                      />
-                      Enable format validation
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="col-span-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Status
                     </label>
+                    <select
+                      value={formData.status || 'active'}
+                      onChange={(e) => setFormData({ 
+                        ...formData, 
+                        status: e.target.value as ConfigurationStatus 
+                      })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    >
+                      <option value="active">Active</option>
+                      <option value="inactive">Inactive</option>
+                      <option value="pending">Pending</option>
+                      <option value="archived">Archived</option>
+                    </select>
+                  </div>
+
+                  <div className="col-span-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Validation Rules
+                    </label>
+                    <div className="space-y-2">
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={Boolean(formData.validationRules?.required?.length)}
+                          onChange={(e) => {
+                            const defaultValues = formData.values || [];
+                            setFormData({
+                              ...formData,
+                              validationRules: {
+                                ...formData.validationRules,
+                                required: e.target.checked ? defaultValues.map(v => v.key).filter(Boolean) : []
+                              }
+                            });
+                          }}
+                          className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                        />
+                        <span className="ml-2 text-sm text-gray-600">
+                          Make all fields required
+                        </span>
+                      </label>
+                      
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={!!formData.validationRules?.format}
+                          onChange={(e) => setFormData({
+                            ...formData,
+                            validationRules: {
+                              ...formData.validationRules,
+                              format: e.target.checked ? {} : undefined
+                            }
+                          })}
+                          className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                        />
+                        <span className="ml-2 text-sm text-gray-600">
+                          Enable format validation
+                        </span>
+                      </label>
+                    </div>
                   </div>
                 </div>
 
                 {/* Dependencies */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     Dependencies
                   </label>
-                  <div className="mt-2 space-y-2">
+                  <div className="space-y-2">
                     {formData.dependencies?.map((dep, index) => (
-                      <div key={index} className="flex items-center space-x-2">
+                      <div key={index} className="flex items-center gap-2">
                         <select
-  value={dep.type}
-  onChange={(e) => {
-    const newDeps = [...(formData.dependencies || [])];
-    newDeps[index] = { 
-      ...dep, 
-      type: e.target.value as DependencyType 
-    };
-    setFormData({ ...formData, dependencies: newDeps });
-  }}
-  className="block w-32 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
->
-  <option value="requires">Requires</option>
-  <option value="conflicts">Conflicts</option>
-  <option value="recommends">Recommends</option>
-</select>
+                          value={dep.type}
+                          onChange={(e) => {
+                            const newDeps = [...(formData.dependencies || [])];
+                            newDeps[index] = { 
+                              ...dep, 
+                              type: e.target.value as DependencyType 
+                            };
+                            setFormData({ ...formData, dependencies: newDeps });
+                          }}
+                          className="w-32 px-2 py-1.5 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        >
+                          <option value="requires">Requires</option>
+                          <option value="conflicts">Conflicts</option>
+                          <option value="recommends">Recommends</option>
+                        </select>
                         <input
                           type="text"
                           value={dep.dependsOn}
@@ -438,7 +432,7 @@ export const ConfigurationEditor: React.FC<ConfigurationEditorProps> = ({
                             newDeps[index] = { ...dep, dependsOn: e.target.value };
                             setFormData({ ...formData, dependencies: newDeps });
                           }}
-                          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                          className="flex-1 px-3 py-1.5 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                           placeholder="Configuration ID or name"
                         />
                         <button
@@ -447,7 +441,7 @@ export const ConfigurationEditor: React.FC<ConfigurationEditorProps> = ({
                             const newDeps = formData.dependencies?.filter((_, i) => i !== index);
                             setFormData({ ...formData, dependencies: newDeps });
                           }}
-                          className="p-2 rounded-md text-red-600 hover:bg-red-100"
+                          className="p-1.5 rounded-md text-red-600 hover:bg-red-50"
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>
@@ -462,7 +456,7 @@ export const ConfigurationEditor: React.FC<ConfigurationEditorProps> = ({
                           { id: generateId(), configurationId: '', dependsOn: '', type: 'requires' }
                         ]
                       })}
-                      className="text-sm text-indigo-600 hover:text-indigo-800"
+                      className="text-sm text-indigo-600 hover:text-indigo-700"
                     >
                       Add Dependency
                     </button>
@@ -475,13 +469,13 @@ export const ConfigurationEditor: React.FC<ConfigurationEditorProps> = ({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700"
+                  className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                   {configId ? 'Update Configuration' : 'Create Configuration'}
                 </button>
@@ -493,3 +487,6 @@ export const ConfigurationEditor: React.FC<ConfigurationEditorProps> = ({
     </Dialog>
   );
 };
+
+export default ConfigurationEditor;
+
