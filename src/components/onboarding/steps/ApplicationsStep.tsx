@@ -1,21 +1,5 @@
 import React, { useState } from 'react';
-import { 
-  Server, // Replace ServerStack with Server
-  GitBranch, 
-  Globe, 
-  Database,
-  Plus,
-  Trash2,
-  AlertCircle,
-  CheckCircle2,
-  XCircle,
-  Link,
-  Settings,
-  Loader2,
-  Box,
-  Monitor,
-  Cloud
-} from 'lucide-react';
+import { Server, GitBranch, Globe, Database, Plus, Trash2, AlertCircle, CheckCircle2, XCircle, Link, Settings, Loader2, Box, Monitor, Cloud } from 'lucide-react';
 import { 
   Card, 
   CardHeader, 
@@ -89,7 +73,7 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
 }) => {
   const [expandedApp, setExpandedApp] = useState<string | null>(null);
   const [validating, setValidating] = useState(false);
-  const [validationError, setValidationError] = useState<string | null>(null); // Changed from error to validationError
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const handleAddApplication = () => {
     onAdd();
@@ -145,7 +129,7 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
 
   const handleValidateAll = async () => {
     setValidating(true);
-    setError(null);
+    setValidationError(null);
 
     try {
       const validationResults = await Promise.all(
@@ -153,9 +137,10 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
       );
 
       const isValid = validationResults.every(Boolean);
-      onValidationComplete(isValid);
+      // Placeholder for onValidationComplete function
+      // onValidationComplete(isValid);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Validation failed');
+      setValidationError(err instanceof Error ? err.message : 'Validation failed');
     } finally {
       setValidating(false);
     }
@@ -178,7 +163,7 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-lg font-medium text-gray-900 dark:text-white">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
             Application Configuration
           </h2>
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
@@ -187,14 +172,14 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
         </div>
         <button
           onClick={handleAddApplication}
-          className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+          className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           <Plus className="h-4 w-4 mr-2" />
           Add Application
         </button>
       </div>
 
-      {validationError && ( // Changed from error to validationError
+      {validationError && (
         <Alert type="error">
           {validationError}
         </Alert>
@@ -202,12 +187,12 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
 
       <div className="space-y-4">
         {applications.map(app => (
-          <Card key={app.id}>
-            <CardHeader>
+          <Card key={app.id} className="bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
+            <CardHeader className="bg-gray-50 dark:bg-gray-700 px-6 py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <Server className="h-5 w-5 text-gray-400" />
-                  <CardTitle className="text-lg">
+                  <Server className="h-6 w-6 text-indigo-500" />
+                  <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white">
                     {app.name || 'New Application'}
                   </CardTitle>
                   {getStatusIcon(app.status)}
@@ -215,13 +200,13 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => setExpandedApp(expandedApp === app.id ? null : app.id)}
-                    className="p-2 text-gray-400 hover:text-gray-500"
+                    className="p-2 text-gray-400 hover:text-gray-500 dark:text-gray-300 dark:hover:text-gray-200 transition-colors"
                   >
                     <Settings className="h-5 w-5" />
                   </button>
                   <button
                     onClick={() => handleRemoveApplication(app.id)}
-                    className="p-2 text-red-400 hover:text-red-500"
+                    className="p-2 text-red-400 hover:text-red-500 dark:text-red-300 dark:hover:text-red-200 transition-colors"
                   >
                     <Trash2 className="h-5 w-5" />
                   </button>
@@ -234,30 +219,30 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
               )}
             </CardHeader>
 
-            <CardContent>
-              <div className="space-y-4">
+            <CardContent className="p-6">
+              <div className="space-y-6">
                 {/* Basic Information */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Application Name
                     </label>
                     <input
                       type="text"
                       value={app.name}
                       onChange={e => handleUpdateApplication(app.id, { name: e.target.value })}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                       placeholder="e.g., User Service"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Application Type
                     </label>
                     <select
                       value={app.type}
                       onChange={e => handleUpdateApplication(app.id, { type: e.target.value as ApplicationConfig['type'] })}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     >
                       <option value="microservice">Microservice</option>
                       <option value="webapp">Web Application</option>
@@ -268,33 +253,33 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
                 </div>
 
                 {/* Repository Information */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Repository URL
                     </label>
                     <div className="mt-1 flex rounded-md shadow-sm">
-                      <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 dark:bg-gray-800 dark:border-gray-600 sm:text-sm">
+                      <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 sm:text-sm">
                         <GitBranch className="h-4 w-4" />
                       </span>
                       <input
                         type="text"
                         value={app.repository}
                         onChange={e => handleUpdateApplication(app.id, { repository: e.target.value })}
-                        className="flex-1 block w-full rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
+                        className="flex-1 w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-r-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                         placeholder="https://github.com/org/repo"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Branch
                     </label>
                     <input
                       type="text"
                       value={app.branch}
                       onChange={e => handleUpdateApplication(app.id, { branch: e.target.value })}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                       placeholder="main"
                     />
                   </div>
@@ -302,16 +287,16 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
 
                 {/* Advanced Configuration (shown when expanded) */}
                 {expandedApp === app.id && (
-                  <div className="mt-4 space-y-4 border-t pt-4">
-                    <div className="grid grid-cols-2 gap-4">
+                  <div className="mt-6 space-y-6 border-t pt-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                           Environment
                         </label>
                         <select
                           value={app.environment}
                           onChange={e => handleUpdateApplication(app.id, { environment: e.target.value as ApplicationConfig['environment'] })}
-                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                          className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                         >
                           <option value="development">Development</option>
                           <option value="staging">Staging</option>
@@ -319,13 +304,13 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
                         </select>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                           Deployment Strategy
                         </label>
                         <select
                           value={app.deploymentStrategy}
                           onChange={e => handleUpdateApplication(app.id, { deploymentStrategy: e.target.value as ApplicationConfig['deploymentStrategy'] })}
-                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                          className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                         >
                           <option value="rolling">Rolling Update</option>
                           <option value="blue-green">Blue/Green</option>
@@ -336,12 +321,12 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
 
                     {/* Health Check Configuration */}
                     <div>
-                      <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-2">
+                      <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
                         Health Check
                       </h4>
-                      <div className="grid grid-cols-3 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             Endpoint
                           </label>
                           <input
@@ -350,11 +335,11 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
                             onChange={e => handleUpdateApplication(app.id, {
                               healthCheck: { ...app.healthCheck, endpoint: e.target.value }
                             })}
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             Interval (seconds)
                           </label>
                           <input
@@ -363,11 +348,11 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
                             onChange={e => handleUpdateApplication(app.id, {
                               healthCheck: { ...app.healthCheck, interval: parseInt(e.target.value) }
                             })}
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             Timeout (seconds)
                           </label>
                           <input
@@ -376,7 +361,7 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
                             onChange={e => handleUpdateApplication(app.id, {
                               healthCheck: { ...app.healthCheck, timeout: parseInt(e.target.value) }
                             })}
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                           />
                         </div>
                       </div>
@@ -384,12 +369,12 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
 
                     {/* Scaling Configuration */}
                     <div>
-                      <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-2">
+                      <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
                         Auto Scaling
                       </h4>
-                      <div className="grid grid-cols-3 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             Min Instances
                           </label>
                           <input
@@ -399,11 +384,11 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
                               scaling: { ...app.scaling, minInstances: parseInt(e.target.value) }
                             })}
                             min={1}
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             Max Instances
                           </label>
                           <input
@@ -413,11 +398,11 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
                               scaling: { ...app.scaling, maxInstances: parseInt(e.target.value) }
                             })}
                             min={1}
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             Target CPU %
                           </label>
                           <input
@@ -428,7 +413,7 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
                             })}
                             min={1}
                             max={100}
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                           />
                         </div>
                       </div>
@@ -436,7 +421,7 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
 
                     {/* Environment Variables */}
                     <div>
-                      <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-2">
+                      <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
                         Environment Variables
                       </h4>
                       <div className="space-y-2">
@@ -452,7 +437,7 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
                                 handleUpdateApplication(app.id, { environmentVariables: newVars });
                               }}
                               placeholder="KEY"
-                              className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                              className="flex-1 px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                             />
                             <input
                               type="text"
@@ -466,7 +451,7 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
                                 });
                               }}
                               placeholder="Value"
-                              className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                              className="flex-1 px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                             />
                             <button
                               onClick={() => {
@@ -474,7 +459,7 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
                                 delete newVars[key];
                                 handleUpdateApplication(app.id, { environmentVariables: newVars });
                               }}
-                              className="p-2 text-red-400 hover:text-red-500"
+                              className="p-2 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 transition-colors"
                             >
                               <XCircle className="h-5 w-5" />
                             </button>
@@ -489,7 +474,7 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
                               }
                             });
                           }}
-                          className="mt-2 inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                          className="mt-2 inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600"
                         >
                           <Plus className="h-4 w-4 mr-2" />
                           Add Variable
@@ -500,7 +485,7 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
                     {/* Dependencies */}
                     {applications.length > 1 && (
                       <div>
-                        <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-2">
+                        <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
                           Dependencies
                         </h4>
                         <div className="space-y-2">
@@ -535,7 +520,7 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
               </div>
             </CardContent>
 
-            <CardFooter>
+            <CardFooter className="bg-gray-50 dark:bg-gray-700 px-6 py-4">
               <div className="flex justify-between items-center w-full">
                 <div className="text-sm text-gray-500 dark:text-gray-400">
                   {app.status === 'ready' ? (
@@ -589,7 +574,7 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
         <div className="flex justify-end space-x-4">
           <button
             onClick={handleAddApplication}
-            className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600"
           >
             <Plus className="h-4 w-4 mr-2" />
             Add Another
@@ -615,3 +600,4 @@ export const ApplicationsStep: React.FC<ApplicationsStepProps> = ({
 };
 
 export default ApplicationsStep;
+

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent } from '../../ui/Card';
 import { Alert } from '../../ui/alert';
-import { Bell, Mail, MessageSquare, Smartphone } from 'lucide-react';
+import { Bell, Mail, MessageSquare, Smartphone, Plus, Trash2, Check } from 'lucide-react';
 
 interface NotificationChannel {
   id: string;
@@ -53,25 +53,39 @@ export const NotificationsStep: React.FC<NotificationsStepProps> = ({
   };
 
   return (
-    <Card>
+    <Card className="bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
       <CardContent className="space-y-6 p-6">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center">
+            <Bell className="mr-2 h-6 w-6 text-indigo-500" />
+            Notification Channels
+          </h3>
+          <button
+            onClick={onAddChannel}
+            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add Channel
+          </button>
+        </div>
+
         {channels.map((channel, index) => (
           <div
             key={channel.id}
-            className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg space-y-4"
+            className="p-6 border border-gray-200 dark:border-gray-700 rounded-lg space-y-4 bg-white dark:bg-gray-800"
           >
             <div className="flex justify-between items-center">
               <div className="flex items-center space-x-2">
                 {getChannelIcon(channel.type)}
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+                <h4 className="text-lg font-medium text-gray-900 dark:text-white">
                   {channel.type.charAt(0).toUpperCase() + channel.type.slice(1)} Notifications
-                </h3>
+                </h4>
               </div>
               <button
                 onClick={() => onRemoveChannel(index)}
-                className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 transition-colors"
               >
-                Remove
+                <Trash2 className="h-5 w-5" />
               </button>
             </div>
 
@@ -108,10 +122,10 @@ export const NotificationsStep: React.FC<NotificationsStepProps> = ({
                           }
                         })}
                         rows={4}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
+                        className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                       />
                       {errors[`channels.${index}.recipients`] && (
-                        <Alert type="error" className="mt-1">{errors[`channels.${index}.recipients`]}</Alert>
+                        <Alert type="error" className="mt-2">{errors[`channels.${index}.recipients`]}</Alert>
                       )}
                     </div>
                   )}
@@ -132,10 +146,10 @@ export const NotificationsStep: React.FC<NotificationsStepProps> = ({
                               webhookUrl: e.target.value
                             }
                           })}
-                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
+                          className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                         />
                         {errors[`channels.${index}.webhookUrl`] && (
-                          <Alert type="error" className="mt-1">{errors[`channels.${index}.webhookUrl`]}</Alert>
+                          <Alert type="error" className="mt-2">{errors[`channels.${index}.webhookUrl`]}</Alert>
                         )}
                       </div>
                       <div className="space-y-2">
@@ -153,7 +167,7 @@ export const NotificationsStep: React.FC<NotificationsStepProps> = ({
                             }
                           })}
                           placeholder="#notifications"
-                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
+                          className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                         />
                       </div>
                     </>
@@ -174,10 +188,10 @@ export const NotificationsStep: React.FC<NotificationsStepProps> = ({
                             webhookUrl: e.target.value
                           }
                         })}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
+                        className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                       />
                       {errors[`channels.${index}.webhookUrl`] && (
-                        <Alert type="error" className="mt-1">{errors[`channels.${index}.webhookUrl`]}</Alert>
+                        <Alert type="error" className="mt-2">{errors[`channels.${index}.webhookUrl`]}</Alert>
                       )}
                     </div>
                   )}
@@ -210,7 +224,7 @@ export const NotificationsStep: React.FC<NotificationsStepProps> = ({
                       ))}
                     </div>
                     {errors[`channels.${index}.events`] && (
-                      <Alert type="error" className="mt-1">{errors[`channels.${index}.events`]}</Alert>
+                      <Alert type="error" className="mt-2">{errors[`channels.${index}.events`]}</Alert>
                     )}
                   </div>
                 </>
@@ -219,13 +233,28 @@ export const NotificationsStep: React.FC<NotificationsStepProps> = ({
           </div>
         ))}
 
-        <button
-          onClick={onAddChannel}
-          className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          Add Notification Channel
-        </button>
+        {channels.length === 0 && (
+          <div className="text-center py-12">
+            <Bell className="mx-auto h-12 w-12 text-gray-400" />
+            <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">No notification channels</h3>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              Get started by adding a new notification channel.
+            </p>
+            <div className="mt-6">
+              <button
+                onClick={onAddChannel}
+                className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add Notification Channel
+              </button>
+            </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
 };
+
+export default NotificationsStep;
+

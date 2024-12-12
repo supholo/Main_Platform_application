@@ -1,4 +1,3 @@
-// src/components/onboarding/steps/IdentityStep.tsx
 import React from 'react';
 import { Card, CardContent } from '../../ui/Card';
 import { Alert } from '../../ui/alert';
@@ -60,34 +59,34 @@ export const IdentityStep: React.FC<IdentityStepProps> = ({
   };
 
   return (
-    <Card>
-      <CardContent className="space-y-6 p-6">
-        <div className="space-y-4">
-          <h3 className="flex items-center text-lg font-medium text-gray-900 dark:text-white">
-            <Shield className="mr-2 h-5 w-5 text-indigo-500" />
+    <Card className="bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
+      <CardContent className="p-6 space-y-8">
+        <div className="space-y-6">
+          <h3 className="flex items-center text-xl font-semibold text-gray-900 dark:text-white">
+            <Shield className="mr-2 h-6 w-6 text-indigo-500" />
             Identity Provider Configuration
           </h3>
           
-          <div className="space-y-2">
+          <div className="space-y-4">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Identity Provider Type
             </label>
             <select
               value={data.provider}
               onChange={(e) => onChange({ ...data, provider: e.target.value as IdentityConfig['provider'] })}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
+              className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
             >
               <option value="internal">Internal Authentication</option>
               <option value="oauth2">OAuth 2.0 / OpenID Connect</option>
               <option value="saml">SAML 2.0</option>
             </select>
             {errors.provider && (
-              <Alert type="error" className="mt-1">{errors.provider}</Alert>
+              <Alert type="error" className="mt-2">{errors.provider}</Alert>
             )}
           </div>
 
           {data.provider === 'oauth2' && (
-            <div className="space-y-4">
+            <div className="space-y-6">
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                   Client ID
@@ -96,7 +95,7 @@ export const IdentityStep: React.FC<IdentityStepProps> = ({
                   type="text"
                   value={data.config.clientId || ''}
                   onChange={(e) => handleConfigChange('clientId', e.target.value)}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
+                  className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
 
@@ -108,7 +107,7 @@ export const IdentityStep: React.FC<IdentityStepProps> = ({
                   type="password"
                   value={data.config.clientSecret || ''}
                   onChange={(e) => handleConfigChange('clientSecret', e.target.value)}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
+                  className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
 
@@ -120,7 +119,7 @@ export const IdentityStep: React.FC<IdentityStepProps> = ({
                   type="url"
                   value={data.config.authorizationUrl || ''}
                   onChange={(e) => handleConfigChange('authorizationUrl', e.target.value)}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
+                  className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
 
@@ -132,14 +131,14 @@ export const IdentityStep: React.FC<IdentityStepProps> = ({
                   type="url"
                   value={data.config.tokenUrl || ''}
                   onChange={(e) => handleConfigChange('tokenUrl', e.target.value)}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
+                  className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
             </div>
           )}
 
           {data.provider === 'saml' && (
-            <div className="space-y-4">
+            <div className="space-y-6">
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                   Metadata URL
@@ -148,7 +147,7 @@ export const IdentityStep: React.FC<IdentityStepProps> = ({
                   type="url"
                   value={data.config.metadataUrl || ''}
                   onChange={(e) => handleConfigChange('metadataUrl', e.target.value)}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
+                  className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
 
@@ -160,16 +159,16 @@ export const IdentityStep: React.FC<IdentityStepProps> = ({
                   value={data.config.certificateData || ''}
                   onChange={(e) => handleConfigChange('certificateData', e.target.value)}
                   rows={4}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
+                  className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
             </div>
           )}
         </div>
 
-        <div className="space-y-4 border-t pt-4">
-          <h3 className="flex items-center text-lg font-medium text-gray-900 dark:text-white">
-            <Key className="mr-2 h-5 w-5 text-indigo-500" />
+        <div className="space-y-6 border-t pt-6">
+          <h3 className="flex items-center text-xl font-semibold text-gray-900 dark:text-white">
+            <Key className="mr-2 h-6 w-6 text-indigo-500" />
             Security Settings
           </h3>
 
@@ -195,7 +194,7 @@ export const IdentityStep: React.FC<IdentityStepProps> = ({
             </div>
 
             <div className="space-y-4">
-              <h4 className="text-sm font-medium text-gray-900 dark:text-white">
+              <h4 className="text-lg font-medium text-gray-900 dark:text-white">
                 Password Policy
               </h4>
 
@@ -210,7 +209,7 @@ export const IdentityStep: React.FC<IdentityStepProps> = ({
                     max="32"
                     value={data.settings.passwordPolicy.minLength}
                     onChange={(e) => handleSettingsChange('minLength', parseInt(e.target.value))}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
+                    className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   />
                 </div>
 
@@ -259,3 +258,4 @@ export const IdentityStep: React.FC<IdentityStepProps> = ({
     </Card>
   );
 };
+

@@ -1,6 +1,8 @@
-import React, { useState } from "react";
-import { Shield, Plus, Trash2, Save, Clock, X } from "lucide-react";
-import { Environment, EnvironmentType } from "../../types/cicd";
+import React, { useState } from 'react';
+import { Shield, Plus, Trash2, Save, Clock, X } from 'lucide-react';
+import { Environment, EnvironmentType } from '../../types/cicd';
+import { Card, CardContent } from '../ui/Card';
+import { Alert } from '../ui/alert';
 
 interface EnvironmentEditorProps {
   environment?: Environment;
@@ -102,8 +104,8 @@ const EnvironmentEditor: React.FC<EnvironmentEditorProps> = ({
 
   const validate = (): boolean => {
     const newErrors: FormErrors = {};
-    if (!formData.name) newErrors.name = "Name is required";
-    if (!formData.type) newErrors.type = "Type is required";
+    if (!formData.name) newErrors.name = 'Name is required';
+    if (!formData.type) newErrors.type = 'Type is required';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -114,7 +116,6 @@ const EnvironmentEditor: React.FC<EnvironmentEditorProps> = ({
     if (!validate()) return;
 
     try {
-      // Format the environment data before saving, excluding the id field
       const environmentData: Omit<Environment, 'id'> = {
         name: formData.name,
         type: formData.type,
@@ -196,13 +197,241 @@ const EnvironmentEditor: React.FC<EnvironmentEditorProps> = ({
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
-      {/* Header */}
-      <div className="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-          {isNew ? "Create Environment" : "Edit Environment"}
-        </h2>
-        <div className="flex space-x-2">
+    <Card className="bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
+      <CardContent className="p-6 space-y-8">
+        <div className="space-y-6">
+          <h3 className="flex items-center text-xl font-semibold text-gray-900 dark:text-white">
+            <Shield className="mr-2 h-6 w-6 text-indigo-500" />
+            {isNew ? 'Create Environment' : 'Edit Environment'}
+          </h3>
+          
+          <div className="grid grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Environment Name
+              </label>
+              <input
+                type="text"
+                value={formData.name}
+                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              />
+              {errors.name && (
+                <Alert type="error" className="mt-1">{errors.name}</Alert>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Type
+              </label>
+              <select
+                value={formData.type}
+                onChange={(e) => setFormData(prev => ({ ...prev, type: e.target.value as EnvironmentType }))}
+                className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              >
+                <option value="development">Development</option>
+                <option value="staging">Staging</option>
+                <option value="production">Production</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h4 className="text-lg font-medium text-gray-900 dark:text-white">
+              Environment Variables
+            </h4>
+            <div className="space-y-2">
+              {Object.entries(formData.variables).map(([key, value]) => (
+                <div key={key} className="flex items-center space-x-2">
+                  <input
+                    type="text"
+                    value={key}
+                    readOnly
+                    className="flex-1 px-3 py-2 text-gray-700 bg-gray-100 dark:bg-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-500 rounded-md"
+                  />
+                  <input
+                    type="text"
+                    value={value}
+                    onChange={(e) => setFormData(prev => ({
+                      ...prev,
+                      variables: {
+                        ...prev.variables,
+                        [key]: e.target.value,
+                      },
+                    }))}
+                    className="flex-1 px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  />
+                  <button
+                    onClick={() => removeVariable(key)}
+                    className="p-2 text-red-600 hover:bg-red-50 rounded-md dark:text-red-400 dark:hover:bg-red-900/20"
+                  >
+                    <Trash2 className="w-5 h-5" />
+                  </button>
+                </div>
+              ))}
+              <div className="flex items-center space-x-2">
+                <input
+                  type="text"
+                  placeholder="KEY"
+                  value={newVariable.key}
+                  onChange={(e) => setNewVariable(prev => ({ ...prev, key: e.target.value }))}
+                  className="flex-1 px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                />
+                <input
+                  type="text"
+                  placeholder="Value"
+                  value={newVariable.value}
+                  onChange={(e) => setNewVariable(prev => ({ ...prev, value: e.target.value }))}
+                  className="flex-1 px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                />
+                <button
+                  onClick={addVariable}
+                  className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-md dark:text-indigo-400 dark:hover:bg-indigo-900/20"
+                >
+                  <Plus className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h4 className="text-lg font-medium text-gray-900 dark:text-white">
+              Protection Rules
+            </h4>
+            <div className="space-y-4">
+              <label className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  checked={formData.protection.requiresApproval}
+                  onChange={(e) => setFormData(prev => ({
+                    ...prev,
+                    protection: {
+                      ...prev.protection,
+                      requiresApproval: e.target.checked,
+                    },
+                  }))}
+                  className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-gray-600"
+                />
+                <span className="text-sm text-gray-700 dark:text-gray-300">
+                  Require approval before deployment
+                </span>
+              </label>
+
+              {formData.protection.requiresApproval && (
+                <div className="pl-6 space-y-4">
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Deployment Window
+                    </label>
+                    <div className="grid grid-cols-3 gap-4">
+                      <input
+                        type="time"
+                        value={formData.protection.restrictions.time.start}
+                        onChange={(e) => setFormData(prev => ({
+                          ...prev,
+                          protection: {
+                            ...prev.protection,
+                            restrictions: {
+                              ...prev.protection.restrictions,
+                              time: {
+                                ...prev.protection.restrictions.time,
+                                start: e.target.value,
+                              },
+                            },
+                          },
+                        }))}
+                        className="px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      />
+                      <input
+                        type="time"
+                        value={formData.protection.restrictions.time.end}
+                        onChange={(e) => setFormData(prev => ({
+                          ...prev,
+                          protection: {
+                            ...prev.protection,
+                            restrictions: {
+                              ...prev.protection.restrictions,
+                              time: {
+                                ...prev.protection.restrictions.time,
+                                end: e.target.value,
+                              },
+                            },
+                          },
+                        }))}
+                        className="px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      />
+                      <select
+                        value={formData.protection.restrictions.time.timezone}
+                        onChange={(e) => setFormData(prev => ({
+                          ...prev,
+                          protection: {
+                            ...prev.protection,
+                            restrictions: {
+                              ...prev.protection.restrictions,
+                              time: {
+                                ...prev.protection.restrictions.time,
+                                timezone: e.target.value,
+                              },
+                            },
+                          },
+                        }))}
+                        className="px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      >
+                        <option value="UTC">UTC</option>
+                        <option value="America/New_York">EST</option>
+                        <option value="America/Los_Angeles">PST</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Protected Branches
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {formData.protection.restrictions.branches.map((branch) => (
+                        <span
+                          key={branch}
+                          className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200"
+                        >
+                          {branch}
+                          <button
+                            onClick={() => {
+                              setFormData(prev => ({
+                                ...prev,
+                                protection: {
+                                  ...prev.protection,
+                                  restrictions: {
+                                    ...prev.protection.restrictions,
+                                    branches: prev.protection.restrictions.branches.filter(b => b !== branch),
+                                  },
+                                },
+                              }));
+                            }}
+                            className="ml-1 text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex space-x-2">
+                      <input
+                        type="text"
+                        placeholder="Add branch (e.g., main)"
+                        className="flex-1 px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        onKeyUp={handleKeyPress}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex justify-end space-x-2">
           <button
             onClick={onCancel}
             className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md dark:text-gray-300 dark:hover:bg-gray-700"
@@ -217,272 +446,10 @@ const EnvironmentEditor: React.FC<EnvironmentEditorProps> = ({
             Save Environment
           </button>
         </div>
-      </div>
-
-      <div className="p-6 space-y-6">
-        {/* Basic Information */}
-        <div className="grid grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Environment Name
-            </label>
-            <input
-              type="text"
-              value={formData.name}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setFormData((prev) => ({ ...prev, name: e.target.value }))
-              }
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            />
-            {errors.name && (
-              <p className="mt-1 text-sm text-red-600">{errors.name}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Type
-            </label>
-            <select
-              value={formData.type}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  type: e.target.value as EnvironmentType,
-                }))
-              }
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            >
-              <option value="development">Development</option>
-              <option value="staging">Staging</option>
-              <option value="production">Production</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Environment Variables */}
-        <div className="space-y-4">
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-            Environment Variables
-          </h3>
-
-          <div className="space-y-2">
-            {Object.entries(formData.variables).map(([key, value]) => (
-              <div key={key} className="flex items-center space-x-2">
-                <input
-                  type="text"
-                  value={key}
-                  readOnly
-                  className="flex-1 rounded-md border-gray-300 bg-gray-50"
-                />
-                <input
-                  type="text"
-                  value={value}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      variables: {
-                        ...prev.variables,
-                        [key]: e.target.value,
-                      },
-                    }))
-                  }
-                  className="flex-1 rounded-md border-gray-300"
-                />
-                <button
-                  onClick={() => removeVariable(key)}
-                  className="p-2 text-red-600 hover:bg-red-50 rounded-md"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-            ))}
-
-            <div className="flex items-center space-x-2">
-              <input
-                type="text"
-                placeholder="KEY"
-                value={newVariable.key}
-                onChange={(e) =>
-                  setNewVariable((prev) => ({ ...prev, key: e.target.value }))
-                }
-                className="flex-1 rounded-md border-gray-300"
-              />
-              <input
-                type="text"
-                placeholder="Value"
-                value={newVariable.value}
-                onChange={(e) =>
-                  setNewVariable((prev) => ({ ...prev, value: e.target.value }))
-                }
-                className="flex-1 rounded-md border-gray-300"
-              />
-              <button
-                onClick={addVariable}
-                className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-md"
-              >
-                <Plus className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Protection Rules */}
-        <div className="space-y-4">
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-            Protection Rules
-          </h3>
-
-          <div className="space-y-4">
-            <label className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                checked={formData.protection.requiresApproval}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    protection: {
-                      ...prev.protection,
-                      requiresApproval: e.target.checked,
-                    },
-                  }))
-                }
-                className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-              />
-              <span className="text-sm text-gray-700 dark:text-gray-300">
-                Require approval before deployment
-              </span>
-            </label>
-
-            {formData.protection.requiresApproval && (
-              <div className="pl-6 space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Deployment Window
-                  </label>
-                  <div className="mt-2 grid grid-cols-3 gap-4">
-                    <input
-                      type="time"
-                      value={formData.protection.restrictions.time.start}
-                      onChange={(e) =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          protection: {
-                            ...prev.protection,
-                            restrictions: {
-                              ...prev.protection.restrictions,
-                              time: {
-                                ...prev.protection.restrictions.time,
-                                start: e.target.value,
-                              },
-                            },
-                          },
-                        }))
-                      }
-                      className="rounded-md border-gray-300"
-                    />
-                    <input
-                      type="time"
-                      value={formData.protection.restrictions.time.end}
-                      onChange={(e) =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          protection: {
-                            ...prev.protection,
-                            restrictions: {
-                              ...prev.protection.restrictions,
-                              time: {
-                                ...prev.protection.restrictions.time,
-                                end: e.target.value,
-                              },
-                            },
-                          },
-                        }))
-                      }
-                      className="rounded-md border-gray-300"
-                    />
-                    <select
-                      value={formData.protection.restrictions.time.timezone}
-                      onChange={(e) =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          protection: {
-                            ...prev.protection,
-                            restrictions: {
-                              ...prev.protection.restrictions,
-                              time: {
-                                ...prev.protection.restrictions.time,
-                                timezone: e.target.value,
-                              },
-                            },
-                          },
-                        }))
-                      }
-                      className="rounded-md border-gray-300"
-                    >
-                      <option value="UTC">UTC</option>
-                      <option value="America/New_York">EST</option>
-                      <option value="America/Los_Angeles">PST</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Protected Branches
-                  </label>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {formData.protection.restrictions.branches.map((branch) => (
-                      <span
-                        key={branch}
-                        className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800"
-                      >
-                        {branch}
-                        <button
-                          onClick={() => {
-                            setFormData((prev) => ({
-                              ...prev,
-                              protection: {
-                                ...prev.protection,
-                                restrictions: {
-                                  ...prev.protection.restrictions,
-                                  branches:
-                                    prev.protection.restrictions.branches.filter(
-                                      (b) => b !== branch
-                                    ),
-                                },
-                              },
-                            }));
-                          }}
-                          className="ml-1 text-indigo-600 hover:text-indigo-800"
-                        >
-                          <X className="w-3 h-3" />
-                        </button>
-                      </span>
-                    ))}
-                  </div>
-                  <div className="mt-2 flex space-x-2">
-                    <input
-                      type="text"
-                      placeholder="Add branch (e.g., main)"
-                      className="flex-1 rounded-md border-gray-300"
-                      onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                        if (e.key === "Enter") {
-                          const input = e.currentTarget;
-                          addBranchRestriction(input.value);
-                          input.value = "";
-                        }
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 
 export default EnvironmentEditor;
+

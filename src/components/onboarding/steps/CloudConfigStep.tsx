@@ -1,7 +1,7 @@
-// src/components/onboarding/steps/CloudConfigStep.tsx
 import React from 'react';
 import { Card, CardContent } from '../../ui/Card';
-import { Alert } from '../..//ui/alert';
+import { Alert } from '../../ui/alert';
+import { Cloud, Server, Key } from 'lucide-react';
 
 interface CloudConfigData {
   provider: string;
@@ -36,68 +36,66 @@ export const CloudConfigStep: React.FC<CloudConfigStepProps> = ({
     });
   };
 
-  return (
-    <Card>
-      <CardContent className="space-y-6 p-6">
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Cloud Provider
-          </label>
-          <select
-            value={data.provider}
-            onChange={(e) => onChange({ ...data, provider: e.target.value })}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
-          >
-            <option value="">Select Provider</option>
-            <option value="aws">Amazon Web Services</option>
-            <option value="azure">Microsoft Azure</option>
-            <option value="gcp">Google Cloud Platform</option>
-          </select>
-          {errors.provider && (
-            <Alert type="error" className="mt-1">{errors.provider}</Alert>
-          )}
-        </div>
+  const regions = {
+    aws: ['us-east-1', 'us-west-2', 'eu-west-1'],
+    azure: ['eastus', 'westeurope', 'southeastasia'],
+    gcp: ['us-central1', 'europe-west1', 'asia-east1']
+  };
 
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Region
-          </label>
-          <select
-            value={data.region}
-            onChange={(e) => onChange({ ...data, region: e.target.value })}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
-          >
-            <option value="">Select Region</option>
-            {data.provider === 'aws' && (
-              <>
-                <option value="us-east-1">US East (N. Virginia)</option>
-                <option value="us-west-2">US West (Oregon)</option>
-                <option value="eu-west-1">EU (Ireland)</option>
-              </>
-            )}
-            {data.provider === 'azure' && (
-              <>
-                <option value="eastus">East US</option>
-                <option value="westeurope">West Europe</option>
-                <option value="southeastasia">Southeast Asia</option>
-              </>
-            )}
-            {data.provider === 'gcp' && (
-              <>
-                <option value="us-central1">US Central</option>
-                <option value="europe-west1">Europe West</option>
-                <option value="asia-east1">Asia East</option>
-              </>
-            )}
-          </select>
-          {errors.region && (
-            <Alert type="error" className="mt-1">{errors.region}</Alert>
-          )}
+  return (
+    <Card className="bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
+      <CardContent className="space-y-8 p-6">
+        <div className="space-y-6">
+          <h3 className="flex items-center text-xl font-semibold text-gray-900 dark:text-white">
+            <Cloud className="mr-2 h-6 w-6 text-indigo-500" />
+            Cloud Provider Configuration
+          </h3>
+          
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Cloud Provider
+              </label>
+              <select
+                value={data.provider}
+                onChange={(e) => onChange({ ...data, provider: e.target.value })}
+                className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              >
+                <option value="">Select Provider</option>
+                <option value="aws">Amazon Web Services</option>
+                <option value="azure">Microsoft Azure</option>
+                <option value="gcp">Google Cloud Platform</option>
+              </select>
+              {errors.provider && (
+                <Alert type="error" className="mt-2">{errors.provider}</Alert>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Region
+              </label>
+              <select
+                value={data.region}
+                onChange={(e) => onChange({ ...data, region: e.target.value })}
+                className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              >
+                <option value="">Select Region</option>
+                {data.provider && regions[data.provider as keyof typeof regions]?.map((region) => (
+                  <option key={region} value={region}>{region}</option>
+                ))}
+              </select>
+              {errors.region && (
+                <Alert type="error" className="mt-2">{errors.region}</Alert>
+              )}
+            </div>
+          </div>
         </div>
 
         {data.provider && (
-          <div className="space-y-4 border-t pt-4 mt-4">
-            <h4 className="text-lg font-medium text-gray-900 dark:text-white">
+          <div className="space-y-6 border-t pt-6">
+            <h4 className="flex items-center text-lg font-medium text-gray-900 dark:text-white">
+              <Key className="mr-2 h-5 w-5 text-indigo-500" />
               Credentials
             </h4>
             
@@ -111,10 +109,10 @@ export const CloudConfigStep: React.FC<CloudConfigStepProps> = ({
                     type="text"
                     value={data.credentials.accessKeyId || ''}
                     onChange={(e) => handleCredentialChange('accessKeyId', e.target.value)}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
+                    className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   />
                   {errors['credentials.accessKeyId'] && (
-                    <Alert type="error" className="mt-1">{errors['credentials.accessKeyId']}</Alert>
+                    <Alert type="error" className="mt-2">{errors['credentials.accessKeyId']}</Alert>
                   )}
                 </div>
                 <div className="space-y-2">
@@ -125,10 +123,10 @@ export const CloudConfigStep: React.FC<CloudConfigStepProps> = ({
                     type="password"
                     value={data.credentials.secretAccessKey || ''}
                     onChange={(e) => handleCredentialChange('secretAccessKey', e.target.value)}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
+                    className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   />
                   {errors['credentials.secretAccessKey'] && (
-                    <Alert type="error" className="mt-1">{errors['credentials.secretAccessKey']}</Alert>
+                    <Alert type="error" className="mt-2">{errors['credentials.secretAccessKey']}</Alert>
                   )}
                 </div>
               </>
@@ -144,7 +142,7 @@ export const CloudConfigStep: React.FC<CloudConfigStepProps> = ({
                     type="text"
                     value={data.credentials.tenantId || ''}
                     onChange={(e) => handleCredentialChange('tenantId', e.target.value)}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
+                    className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   />
                 </div>
                 <div className="space-y-2">
@@ -155,7 +153,7 @@ export const CloudConfigStep: React.FC<CloudConfigStepProps> = ({
                     type="text"
                     value={data.credentials.clientId || ''}
                     onChange={(e) => handleCredentialChange('clientId', e.target.value)}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
+                    className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   />
                 </div>
                 <div className="space-y-2">
@@ -166,10 +164,24 @@ export const CloudConfigStep: React.FC<CloudConfigStepProps> = ({
                     type="password"
                     value={data.credentials.clientSecret || ''}
                     onChange={(e) => handleCredentialChange('clientSecret', e.target.value)}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
+                    className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   />
                 </div>
               </>
+            )}
+
+            {data.provider === 'gcp' && (
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Service Account Key (JSON)
+                </label>
+                <textarea
+                  value={data.credentials.clientSecret || ''}
+                  onChange={(e) => handleCredentialChange('clientSecret', e.target.value)}
+                  rows={4}
+                  className="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                />
+              </div>
             )}
           </div>
         )}
@@ -178,4 +190,5 @@ export const CloudConfigStep: React.FC<CloudConfigStepProps> = ({
   );
 };
 
-// Continue with IdentityStep, NotificationsStep, and RolesStep...
+export default CloudConfigStep;
+
