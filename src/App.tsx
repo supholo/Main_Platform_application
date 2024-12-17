@@ -11,6 +11,7 @@ import LoggingService from './pages/LoggingService';
 import MetricsSystem from './pages/MetricsSystem';
 import IdentityManagement from './pages/IdentityManagement';
 import ConfigurationManagement from './pages/ConfigurationManagement';
+import FeatureManagement from './pages/FeatureManagement';
 import RoleManagement from './pages/RoleManagement';
 import AuditLog from './pages/AuditLog';
 import NotificationSettings from './pages/NotificationSettings';
@@ -45,6 +46,7 @@ const App: React.FC = () => {
                   <Route path="/metrics" element={<MetricsSystem />} />
                   <Route path="/identity" element={<IdentityManagement />} />
                   <Route path="/configurationManagement" element={<ConfigurationManagement />} />
+                  <Route path="/featureManagement" element={<FeatureManagement />} />
                   <Route path="/roles" element={<RoleManagement />} />
                   <Route path="/audit-log" element={<AuditLog />} />
                   <Route path="/notifications" element={<NotificationSettings />} />

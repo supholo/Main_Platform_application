@@ -23,6 +23,12 @@ export type CollectionName =
   | "configurationTemplates" // Add this;
   | "configurationApprovals" // Add this;
   | "configurationPromotions" // Add this;
+  | 'features'                   // Added new collections
+  | 'featureAudits'
+  | 'featureTemplates'
+  | 'featureExperiments'
+  | 'featureMetrics'
+  | 'featurePromotions'
   | "threatIndicators"; // Add this;
 
 export interface BaseEntity {
@@ -79,6 +85,12 @@ export class MockDatabase {
       "configurationTemplates",
       "configurationApprovals",
       "configurationPromotions",
+      "features",
+      "featureAudits",
+      "featureTemplates",
+      "featureExperiments",
+      "featureMetrics",
+      "featurePromotions",
     ];
 
     collections.forEach((collection) => {
