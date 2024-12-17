@@ -150,14 +150,13 @@ export const FeatureEditor: React.FC<FeatureEditorProps> = ({
       <div className="fixed inset-0 z-50 overflow-y-auto">
         <div className="flex min-h-screen items-center justify-center p-4">
           <div className="w-full max-w-3xl bg-white rounded-lg shadow-xl">
-            {/* Header */}
-            <div className="flex justify-between items-center px-6 py-4 border-b">
+            <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900">
                 {featureId ? 'Edit Feature' : 'New Feature'}
               </h2>
               <button
                 onClick={onClose}
-                className="text-gray-400 hover:text-gray-500"
+                className="text-gray-400 hover:text-gray-500 transition-colors"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -170,90 +169,98 @@ export const FeatureEditor: React.FC<FeatureEditorProps> = ({
 
               {/* Basic Information */}
               <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Feature Name
-                  </label>
-                  <input
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="mt-1"
-                    placeholder="Enter feature name"
-                  />
-                  {errors.name && (
-                    <p className="mt-1 text-sm text-red-600">{errors.name}</p>
-                  )}
-                </div>
+                <h3 className="text-sm font-medium text-gray-900 pb-2 border-b">
+                  Basic Information
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="col-span-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Feature Name
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      placeholder="Enter feature name"
+                    />
+                    {errors.name && (
+                      <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+                    )}
+                  </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Feature Key
-                  </label>
-                  <input
-                    value={formData.key}
-                    onChange={(e) => setFormData({ ...formData, key: e.target.value.toLowerCase() })}
-                    className="mt-1"
-                    placeholder="feature_key"
-                  />
-                  {errors.key && (
-                    <p className="mt-1 text-sm text-red-600">{errors.key}</p>
-                  )}
-                </div>
+                  <div className="col-span-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Feature Key
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.key}
+                      onChange={(e) => setFormData({ ...formData, key: e.target.value.toLowerCase() })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      placeholder="feature_key"
+                    />
+                    {errors.key && (
+                      <p className="mt-1 text-sm text-red-600">{errors.key}</p>
+                    )}
+                  </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Description
-                  </label>
-                  <textarea
-                    value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    rows={3}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                  />
-                </div>
+                  <div className="col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Description
+                    </label>
+                    <textarea
+                      value={formData.description}
+                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                      rows={3}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Type
-                  </label>
-                  <select
-                    value={formData.type}
-                    onChange={(e) => setFormData({ ...formData, type: e.target.value as FeatureType })}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                  >
-                    <option value="release">Release Toggle</option>
-                    <option value="experiment">Experiment Toggle</option>
-                    <option value="operational">Operational Toggle</option>
-                    <option value="permission">Permission Toggle</option>
-                  </select>
-                </div>
+                  <div className="col-span-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Type
+                    </label>
+                    <select
+                      value={formData.type}
+                      onChange={(e) => setFormData({ ...formData, type: e.target.value as FeatureType })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    >
+                      <option value="release">Release Toggle</option>
+                      <option value="experiment">Experiment Toggle</option>
+                      <option value="operational">Operational Toggle</option>
+                      <option value="permission">Permission Toggle</option>
+                    </select>
+                  </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Tags
-                  </label>
-                  <input
-                    value={formData.tags?.join(', ')}
-                    onChange={(e) => setFormData({
-                      ...formData,
-                      tags: e.target.value.split(',').map(t => t.trim()).filter(Boolean)
-                    })}
-                    className="mt-1"
-                    placeholder="Enter tags separated by commas"
-                  />
+                  <div className="col-span-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Tags
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.tags?.join(', ')}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        tags: e.target.value.split(',').map(t => t.trim()).filter(Boolean)
+                      })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      placeholder="Enter tags separated by commas"
+                    />
+                  </div>
                 </div>
               </div>
 
               {/* Environment Values */}
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-medium text-gray-900">
+                  <h3 className="text-sm font-medium text-gray-900">
                     Environment Configuration
                   </h3>
                   <button
                     type="button"
                     onClick={addValue}
-                    className="inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+                    className="inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   >
                     <Plus className="h-4 w-4 mr-1.5" />
                     Add Environment
@@ -268,7 +275,7 @@ export const FeatureEditor: React.FC<FeatureEditorProps> = ({
                     {/* Environment Settings */}
                     <div className="grid grid-cols-12 gap-4">
                       <div className="col-span-4">
-                        <label className="block text-sm font-medium text-gray-700">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
                           Environment
                         </label>
                         <select
@@ -276,7 +283,7 @@ export const FeatureEditor: React.FC<FeatureEditorProps> = ({
                           onChange={(e) => updateValue(valueIndex, {
                             environment: e.target.value as FeatureEnvironment
                           })}
-                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         >
                           <option value="development">Development</option>
                           <option value="qa">QA</option>
@@ -286,7 +293,7 @@ export const FeatureEditor: React.FC<FeatureEditorProps> = ({
                       </div>
 
                       <div className="col-span-4">
-                        <label className="block text-sm font-medium text-gray-700">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
                           Rollout Percentage
                         </label>
                         <div className="mt-1 relative rounded-md shadow-sm">
@@ -298,9 +305,9 @@ export const FeatureEditor: React.FC<FeatureEditorProps> = ({
                             onChange={(e) => updateValue(valueIndex, {
                               rolloutPercentage: Number(e.target.value)
                             })}
-                            className="block w-full pr-12 rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-10"
                           />
-                          <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none">
+                          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                             <Percent className="h-4 w-4 text-gray-400" />
                           </div>
                         </div>
@@ -347,7 +354,7 @@ export const FeatureEditor: React.FC<FeatureEditorProps> = ({
                                 onChange={(e) => updateRule(valueIndex, ruleIndex, {
                                   type: e.target.value as 'user' | 'group' | 'environment' | 'percentage' | 'custom'
                                 })}
-                                className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                               >
                                 <option value="user">User</option>
                                 <option value="group">User Group</option>
@@ -365,7 +372,7 @@ export const FeatureEditor: React.FC<FeatureEditorProps> = ({
                                   condition: { ...rule.condition, attribute: e.target.value }
                                 })}
                                 placeholder="Attribute"
-                                className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                               />
                             </div>
 
@@ -375,7 +382,7 @@ export const FeatureEditor: React.FC<FeatureEditorProps> = ({
                                 onChange={(e) => updateRule(valueIndex, ruleIndex, {
                                   condition: { ...rule.condition, operator: e.target.value as any }
                                 })}
-                                className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                               >
                                 <option value="equals">Equals</option>
                                 <option value="contains">Contains</option>
@@ -395,7 +402,7 @@ export const FeatureEditor: React.FC<FeatureEditorProps> = ({
                                   condition: { ...rule.condition, value: e.target.value }
                                 })}
                                 placeholder="Value"
-                                className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                               />
                             </div>
 
@@ -444,7 +451,7 @@ export const FeatureEditor: React.FC<FeatureEditorProps> = ({
                     <button
                       type="button"
                       onClick={addValue}
-                      className="mt-4 inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+                      className="mt-4 inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
                       <Plus className="h-4 w-4 mr-1.5" />
                       Add Environment
@@ -458,13 +465,13 @@ export const FeatureEditor: React.FC<FeatureEditorProps> = ({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700"
+                  className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                   {featureId ? 'Update Feature' : 'Create Feature'}
                 </button>

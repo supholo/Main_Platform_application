@@ -190,7 +190,7 @@ export const FeatureExperiments: React.FC<FeatureExperimentsProps> = ({
         </div>
         <button
           onClick={() => setShowCreateDialog(true)}
-          className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+          className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           <Plus className="h-4 w-4 mr-2" />
           New Experiment
@@ -384,7 +384,7 @@ export const FeatureExperiments: React.FC<FeatureExperimentsProps> = ({
             </p>
             <button
               onClick={() => setShowCreateDialog(true)}
-              className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+              className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               <Plus className="h-4 w-4 mr-2" />
               New Experiment
@@ -405,14 +405,14 @@ export const FeatureExperiments: React.FC<FeatureExperimentsProps> = ({
           <div className="fixed inset-0 z-50 overflow-y-auto">
             <div className="flex min-h-screen items-center justify-center p-4">
               <div className="w-full max-w-3xl bg-white rounded-lg shadow-xl">
-                <div className="flex justify-between items-center p-6 border-b">
-                  <h2 className="text-xl font-semibold">New Experiment</h2>
+                <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200">
+                  <h2 className="text-xl font-semibold text-gray-900">New Experiment</h2>
                   <button
                     onClick={() => {
                       setShowCreateDialog(false);
                       resetForm();
                     }}
-                    className="text-gray-400 hover:text-gray-500"
+                    className="text-gray-400 hover:text-gray-500 transition-colors"
                   >
                     <X className="h-5 w-5" />
                   </button>
@@ -425,94 +425,179 @@ export const FeatureExperiments: React.FC<FeatureExperimentsProps> = ({
 
                   {/* Basic Information */}
                   <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">
-                        Feature
-                      </label>
-                      <select
-                        value={selectedFeature}
-                        onChange={(e) => setSelectedFeature(e.target.value)}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      >
-                        <option value="">Select a feature</option>
-                        {features
-                          .filter(f => f.type === 'experiment')
-                          .map((feature) => (
-                            <option key={feature.id} value={feature.id}>
-                              {feature.name}
-                            </option>
-                          ))
-                        }
-                      </select>
-                      {errors.feature && (
-                        <p className="mt-1 text-sm text-red-600">{errors.feature}</p>
-                      )}
-                    </div>
+                    <h3 className="text-sm font-medium text-gray-900 pb-2 border-b">
+                      Basic Information
+                    </h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="col-span-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Feature
+                        </label>
+                        <select
+                          value={selectedFeature}
+                          onChange={(e) => setSelectedFeature(e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        >
+                          <option value="">Select a feature</option>
+                          {features
+                            .filter(f => f.type === 'experiment')
+                            .map((feature) => (
+                              <option key={feature.id} value={feature.id}>
+                                {feature.name}
+                              </option>
+                            ))
+                          }
+                        </select>
+                        {errors.feature && (
+                          <p className="mt-1 text-sm text-red-600">{errors.feature}</p>
+                        )}
+                      </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">
-                        Experiment Name
-                      </label>
-                      <input
-                        type="text"
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        placeholder="Enter experiment name"
-                      />
-                      {errors.name && (
-                        <p className="mt-1 text-sm text-red-600">{errors.name}</p>
-                      )}
-                    </div>
+                      <div className="col-span-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Experiment Name
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.name}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                          placeholder="Enter experiment name"
+                        />
+                        {errors.name && (
+                          <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+                        )}
+                      </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">
-                        Description
-                      </label>
-                      <textarea
-                        value={formData.description}
-                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                        rows={3}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        placeholder="Describe the experiment's purpose and goals"
-                      />
-                    </div>
+                      <div className="col-span-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Description
+                        </label>
+                        <textarea
+                          value={formData.description}
+                          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                          rows={3}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                          placeholder="Describe the experiment's purpose and goals"
+                        />
+                      </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">
-                        Start Date
-                      </label>
-                      <input
-                        type="datetime-local"
-                        value={formData.startDate?.slice(0, 16)}
-                        onChange={(e) => setFormData({
-                          ...formData,
-                          startDate: new Date(e.target.value).toISOString()
-                        })}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      />
-                    </div>
+                      <div className="col-span-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Start Date
+                        </label>
+                        <input
+                          type="datetime-local"
+                          value={formData.startDate?.slice(0, 16)}
+                          onChange={(e) => setFormData({
+                            ...formData,
+                            startDate: new Date(e.target.value).toISOString()
+                          })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        />
+                      </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">
-                        End Date (Optional)
-                      </label>
-                      <input
-                        type="datetime-local"
-                        value={formData.endDate?.slice(0, 16) || ''}
-                        onChange={(e) => setFormData({
-                          ...formData,
-                          endDate: e.target.value ? new Date(e.target.value).toISOString() : undefined
-                        })}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      />
+                      <div className="col-span-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          End Date (Optional)
+                        </label>
+                        <input
+                          type="datetime-local"
+                          value={formData.endDate?.slice(0, 16) || ''}
+                          onChange={(e) => setFormData({
+                            ...formData,
+                            endDate: e.target.value ? new Date(e.target.value).toISOString() : undefined
+                          })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        />
+                      </div>
                     </div>
                   </div>
 
                   {/* Variants */}
                   <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <h3 className="text-lg font-medium text-gray-900">Variants</h3>
+                    <h3 className="text-sm font-medium text-gray-900 pb-2 border-b">
+                      Variants
+                    </h3>
+                    <div className="space-y-4">
+                      {formData.variants?.map((variant, index) => (
+                        <div
+                          key={variant.id}
+                          className="p-4 border border-gray-200 rounded-lg space-y-4"
+                        >
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Variant Name
+                              </label>
+                              <input
+                                type="text"
+                                value={variant.name}
+                                onChange={(e) => {
+                                  const newVariants = [...(formData.variants || [])];
+                                  newVariants[index] = { ...variant, name: e.target.value };
+                                  setFormData({ ...formData, variants: newVariants });
+                                }}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Allocation %
+                              </label>
+                              <input
+                                type="number"
+                                min="0"
+                                max="100"
+                                value={variant.allocation}
+                                onChange={(e) => {
+                                  const newVariants = [...(formData.variants || [])];
+                                  newVariants[index] = {
+                                    ...variant,
+                                    allocation: Number(e.target.value)
+                                  };
+                                  setFormData({ ...formData, variants: newVariants });
+                                }}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="flex items-center justify-between">
+                            <label className="flex items-center">
+                              <input
+                                type="checkbox"
+                                checked={variant.isControl}
+                                onChange={(e) => {
+                                  const newVariants = [...(formData.variants || [])];
+                                  // Uncheck other control variants
+                                  newVariants.forEach(v => v.isControl = false);
+                                  newVariants[index] = {
+                                    ...variant,
+                                    isControl: e.target.checked
+                                  };
+                                  setFormData({ ...formData, variants: newVariants });
+                                }}
+                                className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                              />
+                              <span className="ml-2 text-sm text-gray-600">Control variant</span>
+                            </label>
+                            
+                            {!variant.isControl && formData.variants!.length > 2 && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const newVariants = formData.variants!.filter((_, i) => i !== index);
+                                  setFormData({ ...formData, variants: newVariants });
+                                }}
+                                className="text-red-600 hover:text-red-700"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      ))}
                       <button
                         type="button"
                         onClick={() => {
@@ -526,103 +611,102 @@ export const FeatureExperiments: React.FC<FeatureExperimentsProps> = ({
                           });
                           setFormData({ ...formData, variants: newVariants });
                         }}
-                        className="inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-md text-indigo-600 hover:text-indigo-700"
+                        className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                       >
-                        <Plus className="h-4 w-4 mr-1.5" />
+                        <Plus className="h-4 w-4 mr-2" />
                         Add Variant
                       </button>
                     </div>
-
-                    {formData.variants?.map((variant, index) => (
-                      <div
-                        key={variant.id}
-                        className="p-4 border border-gray-200 rounded-lg space-y-4"
-                      >
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <label className="block text-sm font-medium text-gray-700">
-                              Variant Name
-                            </label>
-                            <input
-                              type="text"
-                              value={variant.name}
-                              onChange={(e) => {
-                                const newVariants = [...(formData.variants || [])];
-                                newVariants[index] = { ...variant, name: e.target.value };
-                                setFormData({ ...formData, variants: newVariants });
-                              }}
-                              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-sm font-medium text-gray-700">
-                              Allocation %
-                            </label>
-                            <input
-                              type="number"
-                              min="0"
-                              max="100"
-                              value={variant.allocation}
-                              onChange={(e) => {
-                                const newVariants = [...(formData.variants || [])];
-                                newVariants[index] = {
-                                  ...variant,
-                                  allocation: Number(e.target.value)
-                                };
-                                setFormData({ ...formData, variants: newVariants });
-                              }}
-                              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="flex items-center justify-between">
-                          <label className="flex items-center">
-                            <input
-                              type="checkbox"
-                              checked={variant.isControl}
-                              onChange={(e) => {
-                                const newVariants = [...(formData.variants || [])];
-                                // Uncheck other control variants
-                                newVariants.forEach(v => v.isControl = false);
-                                newVariants[index] = {
-                                  ...variant,
-                                  isControl: e.target.checked
-                                };
-                                setFormData({ ...formData, variants: newVariants });
-                              }}
-                              className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                            />
-                            <span className="ml-2 text-sm text-gray-600">Control variant</span>
-                          </label>
-                          
-                          {!variant.isControl && formData.variants!.length > 2 && (
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const newVariants = formData.variants!.filter((_, i) => i !== index);
-                                setFormData({ ...formData, variants: newVariants });
-                              }}
-                              className="text-red-600 hover:text-red-700"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    ))}
                     {errors.variants && (
-                      <p className="text-sm text-red-600">{errors.variants}</p>
+                      <p className="mt-1 text-sm text-red-600">{errors.variants}</p>
                     )}
                     {errors.allocation && (
-                      <p className="text-sm text-red-600">{errors.allocation}</p>
+                      <p className="mt-1 text-sm text-red-600">{errors.allocation}</p>
                     )}
                   </div>
 
                   {/* Metrics */}
                   <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <h3 className="text-lg font-medium text-gray-900">Metrics</h3>
+                    <h3 className="text-sm font-medium text-gray-900 pb-2 border-b">
+                      Metrics
+                    </h3>
+                    <div className="space-y-4">
+                      {formData.metrics?.map((metric, index) => (
+                        <div
+                          key={metric.id}
+                          className="p-4 border border-gray-200 rounded-lg grid grid-cols-3 gap-4"
+                        >
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              Metric Name
+                            </label>
+                            <input
+                              type="text"
+                              value={metric.name}
+                              onChange={(e) => {
+                                const newMetrics = [...(formData.metrics || [])];
+                                newMetrics[index] = { ...metric, name: e.target.value };
+                                setFormData({ ...formData, metrics: newMetrics });
+                              }}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              Type
+                            </label>
+                            <select
+                              value={metric.type}
+                              onChange={(e) => {
+                                const newMetrics = [...(formData.metrics || [])];
+                                newMetrics[index] = {
+                                  ...metric,
+                                  type: e.target.value as 'conversion' | 'numeric' | 'duration'
+                                };
+                                setFormData({ ...formData, metrics: newMetrics });
+                              }}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            >
+                              <option value="conversion">Conversion</option>
+                              <option value="numeric">Numeric</option>
+                              <option value="duration">Duration</option>
+                            </select>
+                          </div>
+
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              Goal
+                            </label>
+                            <input
+                              type="number"
+                              value={metric.goal}
+                              onChange={(e) => {
+                                const newMetrics = [...(formData.metrics || [])];
+                                newMetrics[index] = {
+                                  ...metric,
+                                  goal: Number(e.target.value)
+                                };
+                                setFormData({ ...formData, metrics: newMetrics });
+                              }}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            />
+                          </div>
+
+                          <div className="col-span-3 flex justify-end">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newMetrics = formData.metrics!.filter((_, i) => i !== index);
+                                setFormData({ ...formData, metrics: newMetrics });
+                              }}
+                              className="text-red-600 hover:text-red-700"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
                       <button
                         type="button"
                         onClick={() => {
@@ -635,91 +719,14 @@ export const FeatureExperiments: React.FC<FeatureExperimentsProps> = ({
                           });
                           setFormData({ ...formData, metrics: newMetrics });
                         }}
-                        className="inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-md text-indigo-600 hover:text-indigo-700"
+                        className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                       >
-                        <Plus className="h-4 w-4 mr-1.5" />
+                        <Plus className="h-4 w-4 mr-2" />
                         Add Metric
                       </button>
                     </div>
-
-                    {formData.metrics?.map((metric, index) => (
-                      <div
-                        key={metric.id}
-                        className="p-4 border border-gray-200 rounded-lg grid grid-cols-3 gap-4"
-                      >
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700">
-                            Metric Name
-                          </label>
-                          <input
-                            type="text"
-                            value={metric.name}
-                            onChange={(e) => {
-                              const newMetrics = [...(formData.metrics || [])];
-                              newMetrics[index] = { ...metric, name: e.target.value };
-                              setFormData({ ...formData, metrics: newMetrics });
-                            }}
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700">
-                            Type
-                          </label>
-                          <select
-                            value={metric.type}
-                            onChange={(e) => {
-                              const newMetrics = [...(formData.metrics || [])];
-                              newMetrics[index] = {
-                                ...metric,
-                                type: e.target.value as 'conversion' | 'numeric' | 'duration'
-                              };
-                              setFormData({ ...formData, metrics: newMetrics });
-                            }}
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                          >
-                            <option value="conversion">Conversion</option>
-                            <option value="numeric">Numeric</option>
-                            <option value="duration">Duration</option>
-                          </select>
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700">
-                            Goal
-                          </label>
-                          <input
-                            type="number"
-                            value={metric.goal}
-                            onChange={(e) => {
-                              const newMetrics = [...(formData.metrics || [])];
-                              newMetrics[index] = {
-                                ...metric,
-                                goal: Number(e.target.value)
-                              };
-                              setFormData({ ...formData, metrics: newMetrics });
-                            }}
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                          />
-                        </div>
-
-                        <div className="col-span-3 flex justify-end">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const newMetrics = formData.metrics!.filter((_, i) => i !== index);
-                              setFormData({ ...formData, metrics: newMetrics });
-                            }}
-                            className="text-red-600 hover:text-red-700"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </button>
-                        </div>
-                      </div>
-                    ))}
                     {errors.metrics && (
-                      <p className="text-sm text-red-600">{errors.metrics}</p>
+                      <p className="mt-1 text-sm text-red-600">{errors.metrics}</p>
                     )}
                   </div>
 
@@ -731,14 +738,14 @@ export const FeatureExperiments: React.FC<FeatureExperimentsProps> = ({
                         setShowCreateDialog(false);
                         resetForm();
                       }}
-                      className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                      className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
                       Cancel
                     </button>
                     <button
                       type="button"
                       onClick={handleCreateExperiment}
-                      className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700"
+                      className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
                       Create Experiment
                     </button>
