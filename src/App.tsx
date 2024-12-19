@@ -16,6 +16,7 @@ import RoleManagement from './pages/RoleManagement';
 import AuditLog from './pages/AuditLog';
 import NotificationSettings from './pages/NotificationSettings';
 import OnboardingWizard from './components/OnboardingWizard';
+import Application from './pages/Applications';
 
 const App: React.FC = () => {
 
@@ -41,6 +42,8 @@ const App: React.FC = () => {
               <Layout>
                 <Routes>
                   <Route path="/" element={<Dashboard />} />
+                  <Route path="/applications" element={<Application />} />
+                  <Route path="/applications/*" element={<Application />} />
                   <Route path="/cicd" element={<CICDConfig />} />
                   <Route path="/logging" element={<LoggingService />} />
                   <Route path="/metrics" element={<MetricsSystem />} />

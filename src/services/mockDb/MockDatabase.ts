@@ -29,6 +29,8 @@ export type CollectionName =
   | 'featureExperiments'
   | 'featureMetrics'
   | 'featurePromotions'
+  | 'applicationIntegrations'
+  | 'applicationOnboarding'
   | "threatIndicators"; // Add this;
 
 export interface BaseEntity {
@@ -91,6 +93,8 @@ export class MockDatabase {
       "featureExperiments",
       "featureMetrics",
       "featurePromotions",
+      "applicationIntegrations",
+      "applicationOnboarding",
     ];
 
     collections.forEach((collection) => {

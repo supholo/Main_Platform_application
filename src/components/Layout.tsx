@@ -44,12 +44,13 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   const menuItems = [
     { path: '/', icon: <Home size={20} />, label: 'Dashboard' },
+    { path: '/applications', icon: <GitBranch size={20} />, label: 'Application' },
     { path: '/cicd', icon: <GitBranch size={20} />, label: 'CI/CD' },
     { path: '/logging', icon: <Search size={20} />, label: 'Logging' },
     { path: '/metrics', icon: <Activity size={20} />, label: 'Metrics' },
     { path: '/identity', icon: <Shield size={20} />, label: 'Identity' },
-    { path: '/configurationManagement', icon: <Grid size={20} />, label: 'configurationManagement' },
-    { path: '/featureManagement', icon: <Flag size={20} />, label: 'featureManagement' },
+    { path: '/configurationManagement', icon: <Grid size={20} />, label: 'Configuration Management' },
+    { path: '/featureManagement', icon: <Flag size={20} />, label: 'Feature Management' },
     { path: '/roles', icon: <Users size={20} />, label: 'Roles' },
     { path: '/page-builder', icon: <LayoutIcon size={20} />, label: 'Page Builder' },
     { path: '/audit-log', icon: <FileText size={20} />, label: 'Audit Log' },
